@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "826808082974",
+    "project_id": "academicachievementapp",
+    "storage_bucket": "academicachievementapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826808082974:android:0c7679db57a716966e840f",
+        "android_client_info": {
+          "package_name": "com.example.android.academicachievement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "826808082974-bejdtb0b8va5pmfh6lefisigaaujcavs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ4wU52rfNE2ymbA2vww8tmnzJADyaqzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "826808082974-bejdtb0b8va5pmfh6lefisigaaujcavs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
