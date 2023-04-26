@@ -1,9 +1,10 @@
 # AcademicAchievement
 
+<img src="images/home.jpeg" alt="Home" width="200"/>                   <img src="images/validate.jpeg" alt="Home" width="200"/>   <img src="images/studnt.jpeg" alt="Home" width="200"/>                   <img src="images/scan.jpeg" alt="Home" width="200"/>
+
 An App for English teachers intendes to track the fulfillment of academic milestones by their students:
 
-##Features
-
+## Features
 
 - Add/Edit Courses/Parts/milestones
 - Add/Edit students' profiles
