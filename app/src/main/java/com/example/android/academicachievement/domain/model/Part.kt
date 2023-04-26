@@ -7,4 +7,8 @@ data class Part(val key:String, val name:String, var completed:Boolean=false, va
     fun toPartDto(): PartDto {
         return PartDto(key,name, completed, HashMap(milestones.mapValues { it.value.toMilestoneDto()}))
     }
+
+    fun copy():Part{
+        return Part(key,name, completed, HashMap(milestones.mapValues { it.value.copy()}))
+    }
 }

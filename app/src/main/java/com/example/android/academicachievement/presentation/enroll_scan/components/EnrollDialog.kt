@@ -24,10 +24,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.android.academicachievement.common.Screen
 import com.example.android.academicachievement.domain.model.Course
@@ -40,7 +42,9 @@ import com.example.android.academicachievement.presentation.enroll_scan.DialogSt
 fun EnrollDialog(dialogState: State<DialogState>,
                  confirmDialogState: ConfirmDialogState,
                  onSubmitButtonClick: () -> Unit,
-                 onDismissRequest: () -> Unit) {
+                 onDismissRequest: () -> Unit,
+                 authorizationPin:String
+) {
 
     var overrule by remember { mutableStateOf(false)}
     var overrulePin by remember { mutableStateOf("")}
@@ -76,11 +80,13 @@ fun EnrollDialog(dialogState: State<DialogState>,
                     if (!dialogState.value.isApproved){
                         OutlinedTextField(value = overrulePin, 
                             label = { Text(text = "Overrule PIN")},
-                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword),
                             onValueChange = {
-                            overrulePin=it
-                            if (overrulePin=="1111"){overrule=true}
-                            })
+                                overrulePin=it
+                                overrule=authorizationPin.contentEquals(it)
+                            },
+                            visualTransformation = PasswordVisualTransformation()
+                        )
                     }
                 }
                 Column() {
@@ -105,7 +111,10 @@ fun EnrollDialog(dialogState: State<DialogState>,
                             confirmDialogState = confirmDialogState,
                             dialogState = dialogState,
                             overrule = overrule,
-                            onSubmit = onSubmitButtonClick
+                            onSubmit = {
+                                onSubmitButtonClick()
+                                //onDismissRequest()
+                            }
                         )
                     }
                 }
@@ -122,6 +131,7 @@ fun ConfirmButton(confirmDialogState: ConfirmDialogState, dialogState: State<Dia
     when(confirmDialogState){
         is ConfirmDialogState.Unpressed->{
             isClickable=true
+            color=MaterialTheme.colors.primary
         }
         is ConfirmDialogState.Loading ->{
             color=Color.Gray
@@ -152,7 +162,8 @@ fun ConfirmButton(confirmDialogState: ConfirmDialogState, dialogState: State<Dia
                 Box(Modifier.size(with(LocalDensity.current){ (sizeText.width).toDp()},with(LocalDensity.current){ (sizeText.height).toDp()}),
                     contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(modifier = Modifier
-                        .padding(1.dp).size(with(LocalDensity.current){ (sizeText.height).toDp()}), color =  Color.White )
+                        .padding(1.dp)
+                        .size(with(LocalDensity.current) { (sizeText.height).toDp() }), color =  Color.White )
                 }
             }
             is ConfirmDialogState.Failed -> {
@@ -196,8 +207,6 @@ fun ProfileView(
                 fontSize = 20.sp)
         }
     }
-
-
 }
 
 @Composable

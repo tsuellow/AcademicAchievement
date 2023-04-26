@@ -5,6 +5,7 @@ import com.example.android.academicachievement.domain.model.Student
 
 data class DialogState(var isLoading:Boolean=false,
                        var isApproved:Boolean=false,
+                       var inexistent:Boolean=false,
                        var personalData:Student?=null,
                        var currentCourse: Course?=null,
                        var observations:ArrayList<String> = ArrayList(),

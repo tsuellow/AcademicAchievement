@@ -1,33 +1,42 @@
 {
   "project_info": {
-    "project_number": "826808082974",
-    "project_id": "academicachievementapp",
-    "storage_bucket": "academicachievementapp.appspot.com"
+    "project_number": "591200735231",
+    "firebase_url": "https://academicachievement-bb2bc-default-rtdb.firebaseio.com",
+    "project_id": "academicachievement-bb2bc",
+    "storage_bucket": "academicachievement-bb2bc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:826808082974:android:0c7679db57a716966e840f",
+        "mobilesdk_app_id": "1:591200735231:android:021d0fa525caebdbd421ca",
         "android_client_info": {
           "package_name": "com.example.android.academicachievement"
         }
       },
       "oauth_client": [
         {
-          "client_id": "826808082974-bejdtb0b8va5pmfh6lefisigaaujcavs.apps.googleusercontent.com",
+          "client_id": "591200735231-gn8qi486i738i7tdlqrnn37jo8v9f0rb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.academicachievement",
+            "certificate_hash": "0fbe2316d3c41e6d2ef454ffcad77f8bb49e5adf"
+          }
+        },
+        {
+          "client_id": "591200735231-ms0o6sk3tmlbd3ksusjbfjr8g293a1nc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBJ4wU52rfNE2ymbA2vww8tmnzJADyaqzw"
+          "current_key": "AIzaSyDiJ3Vm0VPyiEl4PGl2pkC4QfuSRiUEXr8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "826808082974-bejdtb0b8va5pmfh6lefisigaaujcavs.apps.googleusercontent.com",
+              "client_id": "591200735231-ms0o6sk3tmlbd3ksusjbfjr8g293a1nc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

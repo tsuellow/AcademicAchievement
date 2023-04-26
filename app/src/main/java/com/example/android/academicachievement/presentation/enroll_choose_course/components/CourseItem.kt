@@ -34,5 +34,4 @@ fun CourseItem(
             overflow = TextOverflow.Ellipsis)
 
     }
-
 }

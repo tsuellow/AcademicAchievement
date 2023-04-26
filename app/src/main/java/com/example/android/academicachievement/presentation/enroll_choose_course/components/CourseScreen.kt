@@ -27,7 +27,7 @@ fun CourseScreen(
         MyTopBar(title = "Courses")
         Box(Modifier.fillMaxSize()) {
             LazyColumn(modifier = Modifier.fillMaxSize()){
-                items(state.courseList.map{it.value.toCourseDto(it.key)}){ course ->
+                items(state.courseList.map{it.value.toCourseDto(it.key)}.sortedBy{ it.key }){ course ->
                     CourseItem(course = course, onItemClicked = { clickedCourse -> navController.navigate(Screen.EnrollScanner.route+"/${clickedCourse.key}")})
                     Divider(Modifier.padding(horizontal = 8.dp))
                 }

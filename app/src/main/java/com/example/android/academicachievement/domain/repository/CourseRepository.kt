@@ -2,15 +2,14 @@ package com.example.android.academicachievement.domain.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.example.android.academicachievement.common.Resource
-import com.example.android.academicachievement.data.remote.dto.CourseDto
-import com.example.android.academicachievement.data.remote.dto.CourseTemplateDto
-import com.example.android.academicachievement.data.remote.dto.CurrentDataDto
-import com.example.android.academicachievement.data.remote.dto.StudentDto
+import com.example.android.academicachievement.data.remote.dto.*
 import kotlinx.coroutines.flow.Flow
 
 interface CourseRepository {
 
     suspend fun getCourseTemplates(): Resource<HashMap<String,CourseTemplateDto>>
+
+    suspend fun setCourseTemplate(courseId:String, courseTemplate:CourseTemplateDto):Boolean
 
     suspend fun getSingleCourseTemplate(id:String):Resource<CourseTemplateDto>
 
@@ -20,7 +19,13 @@ interface CourseRepository {
 
     suspend fun getStudent(studentId:String): Resource<StudentDto>
 
+    suspend fun setStudent(studentId:String, student:StudentDto):Boolean
+
     suspend fun setCourse(studentId:String, course:CourseDto):Boolean
 
     suspend fun archiveCourse(studentId:String, course:CourseDto):Boolean
+
+    suspend fun getTeachers():Resource<HashMap<String,TeacherDto>>
+
+    suspend fun setTeachers(teachers:HashMap<String,TeacherDto>):Boolean
 }

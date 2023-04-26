@@ -7,20 +7,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android.academicachievement.common.PreferenceManager
 import com.example.android.academicachievement.common.Resource
 import com.example.android.academicachievement.data.remote.dto.CurrentDataDto
 import com.example.android.academicachievement.domain.model.Course
 import com.example.android.academicachievement.domain.repository.CourseRepository
+import com.example.android.academicachievement.util.toDateString
+import com.example.android.academicachievement.util.toDateTimeString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class EnrollScanViewModel @Inject constructor(
     private val repository: CourseRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val preferences: PreferenceManager
 ):ViewModel() {
 
     private val _courseState = mutableStateOf(CourseState())
@@ -35,22 +40,28 @@ class EnrollScanViewModel @Inject constructor(
     private val _confirmDialogState:MutableState<ConfirmDialogState> = mutableStateOf(ConfirmDialogState.Unpressed)
     val confirmDialogState: State<ConfirmDialogState> = _confirmDialogState
 
+    lateinit var loginData:PreferenceManager.LoginData
+
     init {
         savedStateHandle.get<String>("courseId")?.let { courseId ->
             getCourse(courseId)
         }
     }
 
+    fun isAuthorized(pin:String):Boolean{
+        return pin.contentEquals(loginData.pin)
+    }
+
     private fun getCourse(courseId:String){
         viewModelScope.launch {
-            val response=repository.getSingleCourseTemplate(courseId)
-            when(response){
+            //first get login data from prefs
+            loginData=preferences.getLoginData()
+            //then make db request
+            when(val response=repository.getSingleCourseTemplate(courseId)){
                 is Resource.Success ->{
                     response.data?.let {
-                        _courseState.value = CourseState(course = it.toCourseDto(courseId).toCourse())
+                        _courseState.value = CourseState(course = it.toCourseDto(courseId).toCourse().copy(enrolledBy = loginData.fullName, dateEnrolled = Date().toDateTimeString()))
                         _scannerState.value = _scannerState.value.copy(subTitle=courseState.value.course.key+". "+courseState.value.course.name, pauseScan = false)
-                        Log.d("testino",it.name)
-                        Log.d("testino",_scannerState.value.subTitle)
                     }
                 }
                 is Resource.Error ->{
@@ -70,12 +81,15 @@ class EnrollScanViewModel @Inject constructor(
     }
 
     fun getCurrentStudentData(id:String){
+        _dialogState.value=DialogState(isLoading = true)
         viewModelScope.launch {
-            val response=repository.getCurrentData(id)
-            when(response){
+            when(val response=repository.getCurrentData(id)){
                 is Resource.Success ->{
+                    Log.d("testinofull", response.data.toString() )
                     response.data?.let {
                         _dialogState.value=processNetworkResponse(it)
+                    }?:run {
+                        _dialogState.value= DialogState(inexistent = true )
                     }
                 }
                 is Resource.Error ->{
@@ -89,10 +103,11 @@ class EnrollScanViewModel @Inject constructor(
     }
 
     private fun processNetworkResponse(currentDataDto: CurrentDataDto):DialogState{
-        currentDataDto.currentCourse?.name?.let { Log.d("testinofull", it )}
+        Log.d("testinofull", currentDataDto.toString() )
+        currentDataDto?.let { Log.d("testinofull", it.toString() )}
         val newDialogState=DialogState(isLoading = false)
         if (currentDataDto.personalData==null){
-            newDialogState.error="Student ID does not exist / has not been registered jet"
+            newDialogState.error="Student ID does not exist / has not been registered jet"//TODO add direct link to create student
         }else{
             newDialogState.personalData=currentDataDto.personalData.toStudent()
             if(currentDataDto.currentCourse==null){
@@ -148,10 +163,14 @@ class EnrollScanViewModel @Inject constructor(
                 _confirmDialogState.value=ConfirmDialogState.Failed
             }
             delay(1500)
+            resetConfirmState()
             doDismiss.invoke()
             pauseScanner(false)
         }
+    }
 
+    fun resetConfirmState(){
+        _confirmDialogState.value=ConfirmDialogState.Unpressed
     }
 
 
